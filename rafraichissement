@@ -1,0 +1,79 @@
+Library = biblihotheque("librer.db", "db_names_bases")
+Library.open()
+value = Library.get_open_vallue()
+count = len(value)
+
+def selection(e):
+    select = box.curselection()
+    item = box.get(select)
+    print(item)
+    open_library(item)
+
+if count == 0:
+    def selections(e):
+        select = box.curselection()
+        item = box.get(select)
+        error = messagebox.showerror("ERREUR_DE_BIBLIHOTHEQUE", "Vous n'avez pas encore de biblihotéque !\n Créé s'en une...")
+        print(item)
+
+    box = Listbox(main_frame, width=40, height=25)
+    box.insert(0, "Vous n'avez pas de biblihothéque pour le moment")
+    box.event_add('<<click>>', '<ButtonRelease-1>', '<ButtonRelease-2>', '<ButtonRelease-3>')
+    box.bind('<<click>>', selections)
+    box.pack(side="right", padx=20, pady=15, ipady=10)
+
+elif count == 3:
+    box = Listbox(main_frame, width=40, height=25)
+    box.insert(0, value[-1])
+    box.insert(1, value[-2])
+    box.insert(2, value[-3])
+    box.event_add('<<click>>', '<ButtonRelease-1>', '<ButtonRelease-2>', '<ButtonRelease-3>')
+    box.bind('<<click>>', selection)
+    box.pack(side="right", padx=20, pady=15, ipady=10)
+
+elif count == 2:
+    box = Listbox(main_frame, width=40, height=25)
+    box.insert(0, value[-1])
+    box.insert(1, value[-2])
+    box.event_add('<<click>>', '<ButtonRelease-1>', '<ButtonRelease-2>', '<ButtonRelease-3>')
+    box.bind('<<click>>', selection)
+    box.pack(side="right", padx=20, pady=15, ipady=10)
+
+elif count == 1:
+    box = Listbox(main_frame, width=40, height=25)
+    box.insert(1, value[-1])
+    box.event_add('<<click>>', '<ButtonRelease-1>', '<ButtonRelease-2>', '<ButtonRelease-3>')
+    box.bind('<<click>>', selection)
+    box.pack(side="right", padx=20, pady=15, ipady=10)
+
+else:
+    box = Listbox(main_frame, width=40, height=25)
+    box.insert(0, value[-1])
+    box.insert(1, value[-2])
+    box.insert(2, value[-3])
+    box.insert(3, value[-4])
+    box.event_add('<<click>>', '<ButtonRelease-1>', '<ButtonRelease-2>', '<ButtonRelease-3>')
+    box.bind('<<click>>', selection)
+    box.pack(side="right", padx=20, pady=15, ipady=10)
+
+# J'aimerai pouvoir rafraichir la listbox quand un element est créé pour avoir a éviter de quitter le programe pour rafraichir la listbox 
+
+def creation_bibli():
+    for c in frame_ocs.winfo_children():
+            c.destroy()
+    def create():
+        try:
+            library_generate = biblihotheque('librer.db', 'db_names_bases')
+            library_name = entry_table_create.get()
+            library_generate.add_table(library_name)
+            entry_table_create.delete(0, END)
+            messagebox.showinfo("BIBLIHOTHEQUE_CREE", "Votre biblihothéque a bien été créé")
+        except:
+            print("Create table are failed")
+    print("creation library are ready")
+    entry_table_create = Entry(frame_ocs, width=30, bg='#8DAC9F', font=("Arial", 15), fg='white')
+    lb_table_create = Label(frame_ocs, text="Veuillez choisir un nom de biblihothéque :", bg='#8DAC9F', font=("Arial", 15), fg='white')
+    btn_create = Button(frame_ocs, text="CREE", bg='#8DAC9F', font=("Arial", 15), fg='white', command=create)
+    lb_table_create.pack(padx=15, pady=10)
+    entry_table_create.pack(padx=15, pady=10, ipady=5)
+    btn_create.pack(padx=15, pady=10, fill='x')
